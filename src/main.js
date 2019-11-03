@@ -8,18 +8,15 @@ import axios from "axios"
 Vue.config.productionTip = false
 
 Vue.use(Vuex)
-const store=new Vuex.Store({
 
+const store=new Vuex.Store({
   state:{
     userList:[],
   },
   getters:{
     getUserList(state){
       return state.userList;
-    }
-    // getUserList(){
-    //   return this.$store.userModule.state.userList
-    // }
+    },
   },
   mutations:{
     setUserList(state,data){
@@ -38,10 +35,7 @@ const store=new Vuex.Store({
     async ajaxDeleteUser(context,obj) {
       console.log("请求delete的userid为", obj.id);
       axios.post('/app/api/user/update',
-        JSON.stringify({
-          id: obj.id,
-          isDel: obj.i
-        }),{
+        JSON.stringify(obj),{
           headers:{
             'Content-Type': 'application/json'
           }

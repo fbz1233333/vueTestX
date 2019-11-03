@@ -8,9 +8,7 @@
 
       <th>删除状态</th>
       <th>修改时间</th>
-      <th>删除？</th>
-      <th>更新</th>
-
+      <th>操作</th>
     </tr>
     <tr v-for="(item ,index) in users">
       <td>{{item.id}}</td>
@@ -28,9 +26,7 @@
 
        </button>
       </td>
-      <td>
-        <button @click="handlerUpdateUser(item.id)">修改</button>
-      </td>
+
     </tr>
   </table>
 </div>
@@ -43,10 +39,6 @@ export default {
     }
   },
   methods:{
-    handleUpdateUser(id){
-      console.log(id)
-    }
-    ,
     handleDeleteUser(id,i){
       console.log(id,i);
 
