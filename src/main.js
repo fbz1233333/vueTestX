@@ -25,22 +25,25 @@ const store=new Vuex.Store({
   },
   actions:{
     async ajaxGetUser(context){
-      let _result=await axios.get('app/api/users').then(response=>{
+      let result=await axios.get('app/api/users').then(response=>{
         console.log("axios请求userList得到"+JSON.stringify(response.data))
         context.commit('setUserList',response.data.userList)
         return response.data.userList;
       });
       return result
     },
-    async ajaxDeleteUser(context,obj) {
-      console.log("请求delete的userid为", obj.id);
+    async ajaxDeleteUser(context,id) {
+      console.log("请求delete的userid为", id);
       axios.post('/app/api/user/update',
-        JSON.stringify(obj),{
+        JSON.stringify({
+          id: id,
+          isDel: 1
+        }),{
           headers:{
             'Content-Type': 'application/json'
           }
         }
-      )
+        )
         .then(function (response) {
           context.dispatch('ajaxGetUser')
         })

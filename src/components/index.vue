@@ -15,16 +15,12 @@
       <td>{{item.name}}</td>
       <td>{{item.password}}</td>
       <td>
-        <div v-if="item.isDel===1">已删除</div>
-        <div v-else-if="item.isDel===0">正常</div>
+        {{item.isDel}}
       </td>
       <td>{{item.updateTime}}</td>
       <td>
 
-        <button v-if="item.isDel===0" @click="handleDeleteUser(item.id,1)">删除</button>
-        <button v-else-if="item.isDel===1" @click="handleDeleteUser(item.id,0)">复原</button>
-
-       </button>
+       <button @click="handleDeleteUser(item.id)">删除</button>
       </td>
 
     </tr>
@@ -39,10 +35,9 @@ export default {
     }
   },
   methods:{
-    handleDeleteUser(id,i){
-      console.log(id,i);
-
-      this.$store.dispatch('ajaxDeleteUser',{id:id,i:i})
+    handleDeleteUser(id){
+      console.log(id);
+      this.$store.dispatch('ajaxDeleteUser',id)
     }
   },
   created:function () {
@@ -51,7 +46,9 @@ export default {
 
   computed:{
     users() {
-      return this.$store.getters.getUserList;
+      // return this.$store.getters.getQuestionList;
+      let _data=this.$store.getters.getUserList;
+      return _data;
     }
   },
 }
