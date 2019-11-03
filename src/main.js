@@ -9,6 +9,9 @@ Vue.config.productionTip = false
 
 Vue.use(Vuex)
 
+const userModule={
+
+}
 const store=new Vuex.Store({
   state:{
     userList:[],
@@ -24,26 +27,25 @@ const store=new Vuex.Store({
     },
   },
   actions:{
-    async ajaxGetUser(context){
-      let result=await axios.get('app/api/users').then(response=>{
-        console.log("axios请求userList得到"+JSON.stringify(response.data))
+    ajaxGetUser(context){
+      axios.get('app/api/users').then(response=>{
+        console.log("axios请求userList得到",response.data)
         context.commit('setUserList',response.data.userList)
         return response.data.userList;
       });
-      return result
     },
-    async ajaxDeleteUser(context,id) {
-      console.log("请求delete的userid为", id);
+    ajaxDeleteUser(context,obj) {
+      console.log("请求delete的userid为", obj.id);
       axios.post('/app/api/user/update',
         JSON.stringify({
-          id: id,
-          isDel: 1
+          id: obj.id,
+          isDel: obj.i
         }),{
           headers:{
             'Content-Type': 'application/json'
           }
         }
-        )
+      )
         .then(function (response) {
           context.dispatch('ajaxGetUser')
         })
