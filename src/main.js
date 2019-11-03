@@ -10,12 +10,14 @@ Vue.config.productionTip = false
 Vue.use(Vuex)
 
 const userModule={
-
-}
-const store=new Vuex.Store({
   state:{
     userList:[],
   },
+  // data(){
+  //   return {
+  //     state: userModule.state
+  //   }
+  // },
   getters:{
     getUserList(state){
       return state.userList;
@@ -23,8 +25,8 @@ const store=new Vuex.Store({
   },
   mutations:{
     setUserList(state,data){
-      this.state.userList=data;
-    },
+      state.userList=data;
+    }
   },
   actions:{
     ajaxGetUser(context){
@@ -53,6 +55,11 @@ const store=new Vuex.Store({
           console.log(error);
         });
     }
+  }
+}
+const store=new Vuex.Store({
+  modules:{
+    userModule
   }
 })
 
