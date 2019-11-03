@@ -5,7 +5,6 @@
       <th>用户id</th>
       <th>用户名</th>
       <th>用户密码</th>
-
       <th>删除状态</th>
       <th>修改时间</th>
       <th>操作</th>
@@ -42,7 +41,10 @@ export default {
     handleDeleteUser(id,i){
       console.log(id,i);
 
-      this.$store.dispatch('ajaxDeleteUser',{id:id,i:i})
+      this.$store.dispatch('ajaxDeleteUser',{
+        id:id,
+        i:i
+      })
     }
   },
   created:function () {
@@ -51,7 +53,9 @@ export default {
 
   computed:{
     users() {
-      return this.$store.getters.getUserList;
+      // return this.$store.getters.getQuestionList;
+      let _data=this.$store.getters.getUserList;
+      return _data;
     }
   },
 }
