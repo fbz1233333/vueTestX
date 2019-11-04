@@ -17,6 +17,7 @@
       <td>
         {{item.isDel}}
       </td>
+      <td>{{item.createTime}}</td>
       <td>{{item.updateTime}}</td>
       <td>
 
@@ -25,17 +26,35 @@
 
     </tr>
   </table>
+  <as-modal :entity="item" @postEntity="handleUpdateUser"/>
+
 </div>
 
 </template>
 <script>
-export default {
+  import asModal from '@/components/entitymodel'
+
+
+  export default {
   data(){
     return{
+      item:{}
     }
   },
+    components:{
+      asModal
+    },
   methods:{
-    handleDeleteUser(id){
+    handleOpenModal(item){
+      this.$modal.show('as-modal')
+      this.item=item
+      console.log("修改的id为",item.id)
+    },
+    handleUpdateUser(obj){
+      console.log("更新的obj为",obj);
+      this.$store.dispatch('ajaxUpdateUser',obj)
+    },
+    handleDeleteUser(id,i){
       console.log(id);
       this.$store.dispatch('ajaxDeleteUser',id)
     }
