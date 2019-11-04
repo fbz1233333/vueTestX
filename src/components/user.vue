@@ -1,14 +1,18 @@
 <template>
 <div>
   <table>
+<!--    <tr>-->
+<!--      <th>用户id</th>-->
+<!--      <th>用户名</th>-->
+<!--      <th>用户密码</th>-->
+<!--      <th>状态</th>-->
+<!--      <th>创建时间</th>-->
+<!--      <th>修改时间</th>-->
+<!--      <th>删除</th>-->
+<!--      <th>修改</th>-->
+<!--    </tr>-->
     <tr>
-      <th>用户id</th>
-      <th>用户名</th>
-      <th>用户密码</th>
-
-      <th>删除状态</th>
-      <th>修改时间</th>
-      <th>操作</th>
+      <th v-for="(value,key,index) in users[0]">{{key}}</th>
     </tr>
     <tr v-for="(item ,index) in users">
       <td>{{item.id}}</td>
@@ -54,7 +58,7 @@
       console.log("更新的obj为",obj);
       this.$store.dispatch('ajaxUpdateUser',obj)
     },
-    handleDeleteUser(id,i){
+    handleDeleteUser(id,isDel){
       console.log(id);
       this.$store.dispatch('ajaxDeleteUser',id)
     }

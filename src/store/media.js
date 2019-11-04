@@ -21,25 +21,23 @@ export default{
   },
   actions:{
     ajaxGetMedia(context){
-      axios.get('app/api/medias').then(response=>{
+      axios.get('app/api/mediasSelective').then(response=>{
         console.log("axios请求mediaList得到",response.data)
         context.commit('setMediaList',response.data.mediaList)
         return response.data.mediaList;
       });
     },
-    ajaxDeleteMedia(context,obj) {
-      console.log("请求delete的mediaId为", obj.id);
+    ajaxUpdateMedia(context,obj) {
+      console.log("请求update的mediaId为", obj);
       axios.patch('/app/api/media/update',
-        JSON.stringify({
-          id: obj.id,
-          isDel: obj.toDel
-        }),{
+        JSON.stringify(obj),{
           headers:{
             'Content-Type': 'application/json'
           }
         }
       )
         .then(function (response) {
+          console.log(JSON.stringify(obj))
           context.dispatch('ajaxGetMedia')
         })
         .catch(function (error) {

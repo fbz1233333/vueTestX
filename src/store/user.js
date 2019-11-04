@@ -4,11 +4,6 @@ export default{
   state:{
     userList:[],
   },
-  // data(){
-  //   return {
-  //     state: userModule.state
-  //   }
-  // },
   getters:{
     getUserList(state){
       return state.userList;

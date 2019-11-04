@@ -8,7 +8,16 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/user',
+      component: user
+    },
+    {
+      path: '/media',
+      component: media
+
+    },
+    {
+      path:'/',
       component: user
     }
   ]
