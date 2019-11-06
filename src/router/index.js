@@ -15,10 +15,6 @@ export default new Router({
       path: '/media',
       component: media
 
-    },
-    {
-      path:'/',
-      component: user
     }
   ]
 })

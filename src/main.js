@@ -4,19 +4,18 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuex from "vuex"
+
 import user from "./store/user"
 import media from "./store/media"
-import VModal from 'vue-js-modal'
 
-Vue.use(VModal, {
-  dialog: true,
-  dynamic: true,
+import ViewUI from 'view-design';
+import 'view-design/dist/styles/iview.css';
 
-})
+
+Vue.use(ViewUI);
 
 Vue.config.productionTip = false
-
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 
 const store=new Vuex.Store({

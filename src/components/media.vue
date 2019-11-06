@@ -32,17 +32,12 @@
 
 </template>
 <script>
-  import asModal from '@/components/entitymodel'
-
 
   export default {
     data(){
       return{
         item:{}
       }
-    },
-    components:{
-      asModal
     },
     methods:{
       handleOpenModal(item){

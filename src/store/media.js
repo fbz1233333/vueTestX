@@ -21,7 +21,7 @@ export default{
   },
   actions:{
     ajaxGetMedia(context){
-      axios.get('app/api/mediasSelective').then(response=>{
+      axios.get('app/api/medias').then(response=>{
         console.log("axios请求mediaList得到",response.data)
         context.commit('setMediaList',response.data.mediaList)
         return response.data.mediaList;
