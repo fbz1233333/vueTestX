@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default{
   state:{
-    userList:[],
+    userList:[]
   },
   getters:{
     getUserList(state){
@@ -18,8 +18,14 @@ export default{
     ajaxGetUser(context){
       axios.get('app/api/users').then(response=>{
         console.log("axios请求userList得到",response.data)
-        context.commit('setUserList',response.data.userList)
+        // context.commit('setUserList',response.data.userList)
         return response.data.userList;
+      });
+    },
+    ajaxGetUserByPage(context,pageInfo){
+      axios.post('app/api/user/getByPage',pageInfo).then(response=>{
+        console.log("axios请求userList得到",response.data)
+        context.commit('setUserList',response.data.userList)
       });
     },
     ajaxUpdateUser(context,obj) {

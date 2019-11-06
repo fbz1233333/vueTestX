@@ -4,11 +4,6 @@ export default{
   state:{
     mediaList:[],
   },
-  // data(){
-  //   return {
-  //     state: mediaModule.state
-  //   }
-  // },
   getters:{
     getMediaList(state){
       return state.mediaList;
@@ -22,6 +17,13 @@ export default{
   actions:{
     ajaxGetMedia(context){
       axios.get('app/api/medias').then(response=>{
+        console.log("axios请求mediaList得到",response.data)
+        // context.commit('setMediaList',response.data.mediaList)
+        return response.data.mediaList;
+      });
+    },
+    ajaxGetMediaByPage(context,pageInfo){
+      axios.post('app/api/media/getByPage',pageInfo).then(response=>{
         console.log("axios请求mediaList得到",response.data)
         context.commit('setMediaList',response.data.mediaList)
         return response.data.mediaList;

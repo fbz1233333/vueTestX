@@ -1,69 +1,170 @@
 <template>
   <div>
-    <table>
-<!--      <tr>-->
-<!--        <th>用户id</th>-->
-<!--        <th>用户名</th>-->
-<!--        <th>用户密码</th>-->
-<!--        <th>状态</th>-->
-<!--        <th>创建时间</th>-->
-<!--        <th>修改时间</th>-->
-<!--        <th>删除</th>-->
-<!--        <th>修改</th>-->
-<!--      </tr>-->
-      <tr>
-        <th v-for="(value,key,index) in medias[0]">{{key}}</th>
-      </tr>
-      <tr v-for="(item ,index) in medias">
-        <td v-for="(value,key,index) in item">
-          {{value}}
-        </td>
-        <td><button @click="handleDeleteMedia(item.id,item.isDel)">
-          <div v-if="item.isDel===1">复原</div>
-          <div v-else-if="item.isDel===0">删除</div>
 
-        </button></td>
-        <td><button @click="handleOpenModal(item)">修改</button></td>
-      </tr>
-    </table>
-    <as-modal :entity="item" @postEntity="handleUpdateMedia"/>
+    <br>
+    <Page :total="pageTotal" :current="pageNum" :page-size="pageSize"  show-sizer show-total
+          placement="top" @on-change="handlePage" @on-page-size-change='handlePageSize' ></Page>
+    <br>
 
+    <Modal v-model="ifShow" title="INFO" @on-ok="handleUpdate">
+      <Row>
+        <div v-for="(value,key,index) in entity" >
+          <label>{{key}}</label> <Input v-model="entity[key]" size="small"/>
+        </div>
+      </Row>
+
+    </Modal>
+
+    <Table :data="medias" :columns="mediaColumns">
+    </Table>
+
+    <!--    <Button type="primary" size="large" @click="exportData(1)"><Icon type="ios-download-outline"></Icon> Export source data</Button>-->
+    <!--    <Button type="primary" size="large" @click="exportData(2)"><Icon type="ios-download-outline"></Icon> Export sorting and filtered data</Button>-->
+    <!--    <Button type="primary" size="large" @click="exportData(3)"><Icon type="ios-download-outline"></Icon> Export custom data</Button>-->
   </div>
 
 </template>
 <script>
-
   export default {
     data(){
       return{
-        item:{}
+        ifShow:false,
+        entity:{},
+        pageTotal:48,
+        pageNum:1,
+        pageSize:10
       }
     },
-    methods:{
-      handleOpenModal(item){
-        this.$modal.show('as-modal')
-        this.item=item
-        console.log("修改的id为",item.id)
-      },
-      handleUpdateMedia(obj){
-        console.log("更新的obj为",obj);
-        this.$store.dispatch('ajaxUpdateMedia',obj)
-      },
-      handleDeleteMedia(id,isDel){
-        console.log(id);
-        this.$store.dispatch('ajaxUpdateMedia',{
-          id:id,
-          isDel: 1-isDel
+    components:{
+
+
+    },
+    methods: {
+      handlePage(value) {
+        this.pageNum=value;
+        console.log(value);
+        this.$store.dispatch('ajaxGetMediaByPage',{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize
         })
+
+      },
+      handlePageSize(value) {
+        this.pageSize = value;
+        console.log(value);
+        this.$store.dispatch('ajaxGetMediaByPage',{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize
+        })
+
+      },
+      handleUpdate(){
+        console.log("更新的entity为",this.entity)
+        this.$store.dispatch('ajaxUpdateMedia',this.entity)
+      },
+
+      handleDelete(index){
+        this.entity=this.medias[index];
+        this.entity.isDel=1-this.entity.isDel;
+        this.$store.dispatch('ajaxUpdateMedia',this.entity)
+      },
+      //Modal相关
+      update(index){
+        this.entity=this.medias[index]
+        this.ifShow=true;
+
       }
+
     },
     created:function () {
-      this.$store.dispatch('ajaxGetMedia')
+      this.$store.dispatch('ajaxGetMediaByPage',{
+        pageNum:this.pageNum,
+        pageSize:this.pageSize
+      })
+
     },
 
     computed:{
-      medias:function (){
+      medias:function () {
         return this.$store.getters.getMediaList;
+      },
+      mediaColumns:function () {
+        return[
+          {
+            title:"id",
+            key:"id"
+          },
+          {
+            title:"标题",
+            key:"title"
+          },
+          {
+            title:'内容',
+            key:'h1'
+          },
+          {
+            title:"状态",
+            key:'isDel',
+            width: 80
+
+          },
+          {
+            title:"创建时间",
+            key:'createTime'
+          },
+          {
+            title:'下载地址1',
+            key:'downloadinfo1'
+          },
+          {
+            title:'下载地址2',
+            key:'downloadinfo2'
+          },
+          {
+            title:'图片位置',
+            key:'imageinfo'
+          },
+          {
+            title:'操作',
+            key:'action',
+            width:300,
+            align:'center',
+            render:(h,params)=>{
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '0px'
+                  },
+                  on: {
+                    click: () => {
+                      //
+                      this.handleDelete(params.index)
+                    }
+                  }
+                }, '删除/复原'),
+                h('Button',{
+                  props:{
+                    type: 'error',
+                    size: 'small'
+                  },
+                  style: {
+
+                  },
+                  on:{
+                    click:()=>{
+                      console.log(params.index)
+                      this.update(params.index)
+                    }
+                  }
+                },'修改')
+              ]);
+            }
+          }
+        ]
       }
     },
   }
