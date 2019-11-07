@@ -37,6 +37,12 @@ export default{
     }
   },
   actions:{
+    ajaxGetMediaById(context,id){
+      axios.get('app/api/media/'+id).then(response=>{
+        console.log("axios根据id请求media得到",response.data)
+        context.commit('setChargeMedia',response.data)
+      });
+    },
     ajaxGetMedia(context){
       axios.get('app/api/medias').then(response=>{
         console.log("axios请求mediaList得到",response.data)

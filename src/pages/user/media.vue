@@ -13,14 +13,18 @@
           </MenuItem>
         </Menu>
         <br>
-        <Row :gutter="16">
+        <Row :gutter="4">
           <Col span="6" v-for="(item,index) in videos" :key="index">
-          <Card style="width: 245px;">
-            <img :src="'app/image/'+item.imageinfo" height="118" width="210"/>
-            <router-link :to="{name:'mediaInfo',params:{media:item}}">进入此media</router-link>
-            <p>{{item.username}}</p>
-          </Card>
-
+          <div>
+            <div style="background:#eee;padding: 1px">
+              <Card style="width: auto;">
+                <img :src="'app/image/'+item.imageinfo" height="118" width="100%"/>
+                <router-link :to="'/to_user/mediaInfo/'+item.id">进入此media</router-link>
+<!--                <p>热度{{item.hot}}</p>-->
+              </Card>
+            </div>
+            <br>
+          </div>
           </Col>
         </Row>
       </Row>
@@ -36,9 +40,15 @@
         <br>
         <Row :gutter="16">
           <Col span="6" v-for="(item,index) in images" :key="index">
-          <Card style="width: 245px;">
-            <img :src="'app/image/'+item.imageinfo" height="118" width="210"/>
-          </Card>
+          <div>
+            <div style="background:#eee;padding: 1px">
+              <Card style="width: auto;">
+                <img :src="'app/image/'+item.imageinfo" height="118" width="100%"/>
+              </Card>
+            </div>
+            <br>
+          </div>
+
           </Col>
         </Row>
       </Row>
@@ -53,8 +63,8 @@
         <br>
         <Row :gutter="16">
           <Col span="6" v-for="(item,index) in musics" :key="index">
-          <Card style="width: 245px;">
-            <img :src="'app/image/'+item.imageinfo" height="118" width="210"/>
+          <Card style="width: auto;">
+            <img :src="'app/image/'+item.imageinfo" height="118" width="100%"/>
           </Card>
           </Col>
         </Row>
@@ -64,7 +74,6 @@
 
       </Col>
 
-      <!--下面是广告的span-->
 
 
       </Col>

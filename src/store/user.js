@@ -3,7 +3,8 @@ import axios from 'axios'
 export default{
   state:{
     userList:[],
-    userCount: 0
+    userCount: 0,
+    userLogin: {}
   },
   getters:{
     getUserList(state){
@@ -11,6 +12,9 @@ export default{
     },
     getUserCount(state){
       return state.userCount
+    },
+    getUserLogin(state){
+      return state.userLogin;
     }
   },
   mutations:{
@@ -19,9 +23,19 @@ export default{
     },
     setUserCount(state,data){
       state.userCount=data
+    },
+    setUserLogin(state,data){
+      state.userLogin=data
     }
   },
   actions:{
+    ajaxLogin(context,user){
+      axios.post('app/api/user/login',user).then(res=>{
+        console.log(user)
+        console.log(res);
+        context.commit('setUserLogin',res.userInfo)
+      })
+    },
     ajaxGetUser(context){
       axios.get('app/api/users').then(response=>{
         console.log("axios请求userList得到",response.data)

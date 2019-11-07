@@ -6,18 +6,25 @@ import admin_index from  '@/pages/admin/index'
 import user_index from  '@/pages/user/index'
 import user_media from '@/pages/user/media'
 import media_info from '@/pages/user/mediaInfo'
-
+import index from '@/pages/index'
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
+      path:'/',
+      redirect:'/to_user'
+    },
+    {
+      path:'/index',
+      component:index
+    },
+    {
       path: '/to_user',
       component: user_index,
       children:[
         {
-          path:'mediaInfo',
-          name:'mediaInfo',
+          path:'mediaInfo/:id',
           component: media_info
         },
         {
