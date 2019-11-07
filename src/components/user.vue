@@ -17,9 +17,9 @@
     <Table :data="users" :columns="userColumns">
     </Table>
 
-<!--    <Button type="primary" size="large" @click="exportData(1)"><Icon type="ios-download-outline"></Icon> Export source data</Button>-->
-<!--    <Button type="primary" size="large" @click="exportData(2)"><Icon type="ios-download-outline"></Icon> Export sorting and filtered data</Button>-->
-<!--    <Button type="primary" size="large" @click="exportData(3)"><Icon type="ios-download-outline"></Icon> Export custom data</Button>-->
+    <!--    <Button type="primary" size="large" @click="exportData(1)"><Icon type="ios-download-outline"></Icon> Export source data</Button>-->
+    <!--    <Button type="primary" size="large" @click="exportData(2)"><Icon type="ios-download-outline"></Icon> Export sorting and filtered data</Button>-->
+    <!--    <Button type="primary" size="large" @click="exportData(3)"><Icon type="ios-download-outline"></Icon> Export custom data</Button>-->
   </div>
 
 </template>
@@ -29,7 +29,8 @@
       return{
         ifShow:false,
         entity:{},
-        pageTotal:48,
+
+        pageTotal:0,
         pageNum:1,
         pageSize:10
       }
@@ -76,7 +77,7 @@
 
     },
     created:function () {
-        this.$store.dispatch('ajaxGetUserByPage',{
+      this.$store.dispatch('ajaxGetUserByPage',{
         pageNum:this.pageNum,
         pageSize:this.pageSize
       })
@@ -85,6 +86,7 @@
 
     computed:{
       users:function () {
+        this.pageTotal=this.$store.getters.getUserCount
         return this.$store.getters.getUserList;
       },
       userColumns:function () {

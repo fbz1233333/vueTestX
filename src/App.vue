@@ -3,13 +3,13 @@
     <Row>
       <Col span="16" offset="4">
       <Menu mode="horizontal">
-        <MenuItem name="1" to="/user">
+        <MenuItem name="1" to="/to_user">
           <Icon type="ios-paper"></Icon>
-          用户管理
+          普通用户
         </MenuItem>
-        <MenuItem name="2" to="/media">
+        <MenuItem name="2" to="/to_admin">
           <Icon type="ios-paper"></Icon>
-          媒体管理
+          管理员
         </MenuItem>
       </Menu>
       <router-view/>

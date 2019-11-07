@@ -30,7 +30,7 @@
       return{
         ifShow:false,
         entity:{},
-        pageTotal:48,
+        pageTotal:0,
         pageNum:1,
         pageSize:10
       }
@@ -81,11 +81,10 @@
         pageNum:this.pageNum,
         pageSize:this.pageSize
       })
-
     },
-
     computed:{
       medias:function () {
+        this.pageTotal=this.$store.getters.getMediaCount;
         return this.$store.getters.getMediaList;
       },
       mediaColumns:function () {
@@ -106,7 +105,6 @@
             title:"状态",
             key:'isDel',
             width: 80
-
           },
           {
             title:"创建时间",
