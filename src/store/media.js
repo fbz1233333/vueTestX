@@ -5,7 +5,8 @@ export default{
     mediaList:[],
     mediaCount:0,
     mixedMedia:{
-    }
+    },
+    chargeMedia:{}
   },
   getters:{
     getMediaList(state){
@@ -16,9 +17,15 @@ export default{
     },
     getMixedMedia(state){
       return state.mixedMedia;
+    },
+    getChargeMedia(state){
+      return state.chargeMedia
     }
   },
   mutations:{
+    setChargeMedia(state,data){
+      state.chargeMedia=data
+    },
     setMediaList(state,data){
       state.mediaList=data;
     },
