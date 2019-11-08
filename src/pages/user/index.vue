@@ -24,7 +24,8 @@
 
           <div class="layout-nav-right">
             <div>
-              <Button type="primary" @click="handleOpenLogin">LOGIN</Button>
+              <Button v-if="userLogin==null" type="primary" @click="handleOpenLogin">LOGIN</Button>
+              <p v-else>{{userLogin.name}}</p>
             </div>
 
           </div>
@@ -83,9 +84,9 @@
 <!--    登录框-->
     <Modal v-model="seen_loginModal" title="LOGIN" okText="提交" @on-ok="handlePostLogin">
       <label>name</label>
-      <Input type="text" v-model="userlogin.name"/>
+      <Input type="text" v-model="userInfo.name"/>
       <label>password</label>
-      <Input type="text" v-model="userlogin.password"/>
+      <Input type="text" v-model="userInfo.password"/>
       <br>
     </Modal>
 
@@ -101,11 +102,17 @@ export default {
       seen_loginModal:false,
       span:14,
       offset:5,
-      userlogin:{
+      userInfo:{
         name:'',
         password:''
-      }
+      },
+
     }
+  },
+  computed:{
+    userLogin:function(){
+      return this.$store.getters.getUserLogin;
+    },
   },
   methods:{
     HandleHideCarousel(){
@@ -116,8 +123,8 @@ export default {
       this.seen_loginModal=true;
     },
     handlePostLogin(){
-      console.log('post....',this.userlogin)
-      this.$store.dispatch('ajaxLogin',this.userlogin)
+      console.log('post....',this.userInfo)
+      this.$store.dispatch('ajaxLogin',this.userInfo)
     }
   }
 

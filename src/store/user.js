@@ -14,7 +14,7 @@ export default{
       return state.userCount
     },
     getUserLogin(state){
-      return state.userLogin;
+      return state.userLogin.userInfo;
     }
   },
   mutations:{
@@ -26,14 +26,20 @@ export default{
     },
     setUserLogin(state,data){
       state.userLogin=data
-    }
+    },
   },
   actions:{
     ajaxLogin(context,user){
-      axios.post('app/api/user/login',user).then(res=>{
-        console.log(user)
-        console.log(res);
-        context.commit('setUserLogin',res.userInfo)
+      console.log("认证的用户信息为",user);
+      axios.post('app/api/user/login',user).then(response=>{
+        let userInfo=response.data.userInfo;
+        let Token=response.data.Token
+        // console.log("返回的用户信息为",response.data.userInfo);
+        if (userInfo===undefined){
+          console.log(response.data.errorInfo)
+        }else {
+          context.commit('setUserLogin',response.data);
+        }
       })
     },
     ajaxGetUser(context){

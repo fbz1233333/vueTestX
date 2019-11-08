@@ -15,6 +15,8 @@
 <!--      </Carousel>-->
 <!--    </div>-->
     <Row>
+      <Col span="16" offset="4">
+
       <Menu mode="horizontal">
         <MenuItem name="1" to="/to_admin/user">
           <Icon type="ios-paper"></Icon>
@@ -26,11 +28,14 @@
         </MenuItem>
       </Menu>
       <router-view/>
+    </Col>
     </Row>
   </div>
 </template>
 <script>
+export default {
 
+}
 </script>
 <style scoped>
 </style>

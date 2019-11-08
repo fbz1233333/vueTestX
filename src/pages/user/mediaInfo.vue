@@ -19,16 +19,20 @@
       <img :src="'app/image/'+mediaInfo" width="100%"/>
       <h2>{{media.h2}}</h2>
 
-      <textArea>{{media.h3}}</textArea>
+      <p style="word-wrap:break-word;font-size: 20px">Content:{{media.h3}}</p>
 
 
 
-      <Button type="default">下载</Button>
-      下载数目
-      <Button type="primary">收藏</Button>
-      点赞数目:
-      <Button type="error">点赞</Button>
-      收藏数目:
+        <div style="margin-bottom: 0">
+
+          <Button type="default">下载</Button>
+
+          <Button type="primary">收藏</Button>
+
+          <Button type="error">点赞</Button>
+
+        </div>
+
 
     </Card>
     <Card>
@@ -46,10 +50,12 @@
 
   <img src="../../assets/ad4.png" height="95" width="100%"/>
 
-    <a>
-      <img  @click="OpenLogin" src="../../assets/loginII.png" height="67" width="100%"/>
 
+    <a v-if="userLogin==null">
+      <img  @click="OpenLogin" src="../../assets/loginII.png" height="67" width="100%"/>
     </a>
+<!--  //标记-->
+    <textarea v-else>{{userLogin.name}}</textarea>
 </div>
 </template>
 <script>
@@ -67,6 +73,9 @@ export default {
     }
   },
   computed:{
+    userLogin:function(){
+      return this.$store.getters.getUserLogin;
+    },
     media:function () {
       console.log(this.$store.getters.getChargeMedia)
       return this.$store.getters.getChargeMedia;
