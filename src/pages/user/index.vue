@@ -1,5 +1,7 @@
 <template>
   <div>
+    {{userInfo}}<br>
+    {{token}}
     <Row>
       <Col :span="span" :offset="offset">
       <Row>
@@ -22,18 +24,18 @@
             </MenuItem>
           </div>
 
-          <div class="layout-nav-right">
-            <div>
-              <Button v-if="userLogin==null" type="primary" @click="handleOpenLogin">LOGIN</Button>
-              <p v-else>{{userLogin.name}}</p>
-            </div>
-
+          <div v-if="userInfo==null" class="layout-nav-right">
+              <Button   type="primary" @click="handleOpenLogin">LOGIN</Button>
+          </div>
+          <div v-else-if="userInfo!=null" class="layout-nav-right-bak">
+            <Button type="info" @click="handleIII">user:{{userInfo.name}}</Button>
+            <Button type="error" @click="handleLoginOut">logout</Button>
           </div>
         </Menu>
 
       </Row>
-    </Col>
-<!--      轮播图-->
+      </Col>
+      <!--      轮播图-->
       <Col span="24">
       <div v-if="seen_carousel">
         <Carousel>
@@ -49,7 +51,7 @@
           </Carousel-item>
         </Carousel>
       </div>
-    </Col>
+      </Col>
 
       <Col :span="span" :offset="offset">
       <img src="../../assets/ads2.png" height="100" width="100%"/>
@@ -61,74 +63,102 @@
         </Col>
         <Col span="6">
 
-          <br><img src="../../assets/adimage1.png" height="138" width="240"/>
-          <br><img src="../../assets/adimage1.png" height="138" width="240"/>
-          <br><img src="../../assets/adimage1.png" height="138" width="240"/>
-          <br><img src="../../assets/adimage1.png" height="138" width="240"/>
-          <br><img src="../../assets/adimage1.png" height="138" width="240"/>
-          <br><img src="../../assets/adimage1.png" height="138" width="240"/>
-          <br><img src="../../assets/adimage1.png" height="138" width="240"/>
-          <br><img src="../../assets/adimage1.png" height="138" width="240"/>
-          <br><img src="../../assets/adimage1.png" height="138" width="240"/>
-          <br><img src="../../assets/adimage1.png" height="138" width="240"/>
+        <br><img src="../../assets/adimage1.png" height="138" width="240"/>
+        <br><img src="../../assets/adimage1.png" height="138" width="240"/>
+        <br><img src="../../assets/adimage1.png" height="138" width="240"/>
+        <br><img src="../../assets/adimage1.png" height="138" width="240"/>
+        <br><img src="../../assets/adimage1.png" height="138" width="240"/>
+        <br><img src="../../assets/adimage1.png" height="138" width="240"/>
+        <br><img src="../../assets/adimage1.png" height="138" width="240"/>
+        <br><img src="../../assets/adimage1.png" height="138" width="240"/>
+        <br><img src="../../assets/adimage1.png" height="138" width="240"/>
+        <br><img src="../../assets/adimage1.png" height="138" width="240"/>
 
         </Col>
       </Row>
-    </Col>
+      </Col>
       <Col span="24">
 
       <img src="../../assets/footer.png" height="277" width="100%"/>
       </Col>
     </Row>
 
-<!--    登录框-->
+    <!--    登录框-->
     <Modal v-model="seen_loginModal" title="LOGIN" okText="提交" @on-ok="handlePostLogin">
       <label>name</label>
-      <Input type="text" v-model="userInfo.name"/>
+      <Input type="text" v-model="loginInfo.name"/>
       <label>password</label>
-      <Input type="text" v-model="userInfo.password"/>
+      <Input type="text" v-model="loginInfo.password"/>
       <br>
     </Modal>
-
 
   </div>
 </template>
 <script>
-export default {
 
-  data(){
-    return{
-      seen_carousel:true,
-      seen_loginModal:false,
-      span:14,
-      offset:5,
-      userInfo:{
-        name:'',
-        password:''
+  import cookies from 'js-cookie'
+  import axios from 'axios'
+
+  export default {
+    data(){
+      return{
+        seen_carousel:true,
+        seen_loginModal:false,
+
+
+        span:14,
+        offset:5,
+
+        loginInfo:{
+          name:'',
+          password:''
+        }
+      }
+    },
+    computed:{
+      token(){
+        // console.log(cookies.get('token'))
+        let info=this.$store.getters.getToken
+        console.log("计算token的值...",info)
+
+        return info
       },
+      userInfo(){
+        // console.log(cookies.get('userInfo'))
+        let info=this.$store.getters.getUserInfo
+        let data =info
+        console.log("计算userInfo...:",data)
+        return data
+      }
 
+    },
+    methods:{
+      handleLoginOut(){
+        console.log("logout...")
+        cookies.remove('token')
+        cookies.remove('userInfo')
+        this.$store.commit('setUserInfo')
+        this.$store.commit('setToken')
+        axios.defaults.headers.common['token'] = '';
+        axios.defaults.headers.common['UID'] = ''
+      },
+      handleIII(){
+        console.log("click",this.userInfo)
+      },
+      HandleHideCarousel(){
+        this.seen_carousel=false
+      },
+      handleOpenLogin(){
+        console.log('handleOpenLogin');
+        this.seen_loginModal=true;
+      },
+      handlePostLogin(){
+        console.log('post....',this.loginInfo)
+        this.$store.dispatch('ajaxLogin',this.loginInfo)
+      }
     }
-  },
-  computed:{
-    userLogin:function(){
-      return this.$store.getters.getUserLogin;
-    },
-  },
-  methods:{
-    HandleHideCarousel(){
-      this.seen_carousel=false
-    },
-    handleOpenLogin(){
-      console.log('handleOpenLogin');
-      this.seen_loginModal=true;
-    },
-    handlePostLogin(){
-      console.log('post....',this.userInfo)
-      this.$store.dispatch('ajaxLogin',this.userInfo)
-    }
+
   }
-
-}
 </script>
 <style scoped>
   .layout-nav-right{
@@ -139,5 +169,10 @@ export default {
   .layout-nav-left{
     margin: 0 auto;
     margin-left: 0;
+  }
+  .layout-nav-right-bak{
+    width: 200px;
+    margin: 0 auto;
+    margin-right: 0;
   }
 </style>

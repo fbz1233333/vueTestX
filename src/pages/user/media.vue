@@ -44,6 +44,7 @@
             <div style="background:#eee;padding: 1px">
               <Card style="width: auto;">
                 <img :src="'app/image/'+item.imageinfo" height="118" width="100%"/>
+                <router-link :to="'/to_user/mediaInfo/'+item.id">进入此media</router-link>
               </Card>
             </div>
             <br>
@@ -65,6 +66,7 @@
           <Col span="6" v-for="(item,index) in musics" :key="index">
           <Card style="width: auto;">
             <img :src="'app/image/'+item.imageinfo" height="118" width="100%"/>
+            <router-link :to="'/to_user/mediaInfo/'+item.id">进入此media</router-link>
           </Card>
           </Col>
         </Row>

@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import Cookies from 'js-cookie'
 export default{
   state:{
     userList:[],
@@ -13,9 +13,14 @@ export default{
     getUserCount(state){
       return state.userCount
     },
+
+
     getUserLogin(state){
       return state.userLogin.userInfo;
-    }
+    },
+    getUserToken(state){
+      return this.state.userLogin.token;
+    },
   },
   mutations:{
     setUserList(state,data){
@@ -24,24 +29,9 @@ export default{
     setUserCount(state,data){
       state.userCount=data
     },
-    setUserLogin(state,data){
-      state.userLogin=data
-    },
+
   },
   actions:{
-    ajaxLogin(context,user){
-      console.log("认证的用户信息为",user);
-      axios.post('app/api/user/login',user).then(response=>{
-        let userInfo=response.data.userInfo;
-        let Token=response.data.Token
-        // console.log("返回的用户信息为",response.data.userInfo);
-        if (userInfo===undefined){
-          console.log(response.data.errorInfo)
-        }else {
-          context.commit('setUserLogin',response.data);
-        }
-      })
-    },
     ajaxGetUser(context){
       axios.get('app/api/users').then(response=>{
         console.log("axios请求userList得到",response.data)
