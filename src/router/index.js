@@ -7,6 +7,7 @@ import user_index from  '@/pages/user/index'
 import user_media from '@/pages/user/media'
 import media_info from '@/pages/user/mediaInfo'
 import index from '@/pages/index'
+import user_info from '@/pages/user/userInfo'
 Vue.use(Router)
 
 export default new Router({
@@ -34,6 +35,10 @@ export default new Router({
         {
           path:'/',
           component: user_media
+        },
+        {
+          path:'user_info/:id',
+          component: user_info
         }
       ]
     },

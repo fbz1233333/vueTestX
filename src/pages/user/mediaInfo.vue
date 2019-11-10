@@ -55,7 +55,6 @@
       <img  @click="OpenLogin" src="../../assets/loginII.png" height="67" width="100%"/>
     </a>
 <!--  //标记-->
-    <textarea v-else>{{userLogin.name}}</textarea>
 </div>
 </template>
 <script>

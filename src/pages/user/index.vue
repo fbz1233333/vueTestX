@@ -28,7 +28,7 @@
               <Button   type="primary" @click="handleOpenLogin">LOGIN</Button>
           </div>
           <div v-else-if="userInfo!=null" class="layout-nav-right-bak">
-            <Button type="info" @click="handleIII">user:{{userInfo.name}}</Button>
+            <Button type="info" :to="'/to_user/user_info/'+userInfo.id">user:{{userInfo.name}}</Button>
             <Button type="error" @click="handleLoginOut">logout</Button>
           </div>
         </Menu>
@@ -139,7 +139,7 @@
         cookies.remove('userInfo')
         this.$store.commit('setUserInfo')
         this.$store.commit('setToken')
-        axios.defaults.headers.common['token'] = '';
+        axios.defaults.headers.common['token'] = ''
         axios.defaults.headers.common['UID'] = ''
       },
       handleIII(){

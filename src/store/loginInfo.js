@@ -3,7 +3,8 @@ import cookie from "js-cookie"
 export default{
   state:{
     userInfo:eval ("(" + cookie.get('userInfo') + ")"),
-    token:cookie.get('token')
+    token:cookie.get('token'),
+    myInfo:{}
   },
   getters:{
     getUserInfo(state){
@@ -11,6 +12,9 @@ export default{
     },
     getToken(state){
       return state.token
+    },
+    getMyInfo(state){
+      return state.myInfo
     }
   },
   mutations:{
@@ -22,6 +26,9 @@ export default{
     setToken(state,data){
       state.token=data;
       cookie.set("token",data)
+    },
+    setMyInfo(state,data){
+      state.myInfo=data
     }
   },
   actions:{
@@ -41,6 +48,12 @@ export default{
         }
 
         });
+    },
+    ajaxGetMyInfo(context,id){
+      axios.get('app/api/user/myInfo/'+id).then(response=>{
+        console.log(response.data)
+        context.commit('setMyInfo',response.data.myInfo)
+      })
     },
 
   }
