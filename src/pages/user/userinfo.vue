@@ -5,9 +5,15 @@
 
       <Card style="height: 1000px">
         <br>
-        <h1>用户id:{{myInfo.id}}</h1>
-        <h1>用户名:{{myInfo.name}}</h1>
-        <h1>创建时间:{{myInfo.createTime}}</h1>
+        <div v-if="myInfo!=null">
+          <h1>用户id:{{myInfo.id}}</h1>
+          <h1>用户名:{{myInfo.name}}</h1>
+          <h1>创建时间:{{myInfo.createTime}}</h1>
+          <h1>头像:{{myInfo.headPic}}</h1>
+        </div>
+        <Table :data="collections" :columns="collectionsColumns">
+        </Table>
+
 
 
       </Card>
@@ -17,6 +23,9 @@
 <script>
   export default{
     computed:{
+      collections(){
+        return this.$store.getters.getCollectionsByUid;
+      },
       myInfo(){
         return this.$store.getters.getMyInfo;
       }

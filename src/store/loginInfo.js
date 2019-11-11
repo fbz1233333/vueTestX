@@ -41,8 +41,6 @@ export default{
           console.log("登陆成功")
           context.commit('setUserInfo',response.data.userInfo)
           context.commit('setToken',response.data.token)
-          axios.defaults.headers.common['token'] = response.data.token;
-          axios.defaults.headers.common['UID'] = response.data.userInfo.id;
         }else {
           console.log('失败:no such user')
         }
@@ -50,9 +48,16 @@ export default{
         });
     },
     ajaxGetMyInfo(context,id){
-      axios.get('app/api/user/myInfo/'+id).then(response=>{
+      axios.get('app/api/user/myInfo/'+id,{
+        headers:{
+          'UID':(eval ("(" + cookie.get('userInfo') + ")")).id,
+          'token':cookie.get('token')
+        }
+      }).then(response=>{
         console.log(response.data)
         context.commit('setMyInfo',response.data.myInfo)
+      }).catch(error=>{
+        console.log(error.errorInfo)
       })
     },
 

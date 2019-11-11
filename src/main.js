@@ -8,6 +8,7 @@ import Vuex from "vuex"
 import user from "./store/user"
 import media from "./store/media"
 import loginInfo from "./store/loginInfo"
+import collection from "./store/collection"
 
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
@@ -19,7 +20,7 @@ Vue.use(Vuex);
 
 const store=new Vuex.Store({
   modules:{
-   loginInfo, user,media,
+   loginInfo, user,media,collection
   }
 })
 

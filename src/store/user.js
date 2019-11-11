@@ -15,12 +15,6 @@ export default{
     },
 
 
-    getUserLogin(state){
-      return state.userLogin.userInfo;
-    },
-    getUserToken(state){
-      return this.state.userLogin.token;
-    },
   },
   mutations:{
     setUserList(state,data){
@@ -49,12 +43,10 @@ export default{
     ajaxUpdateUser(context,obj) {
       console.log("请求update的userId为", obj);
       axios.patch('/app/api/user/update',obj
-      )
-        .then(function (response) {
+      ).then(function (response) {
           console.log(JSON.stringify(obj))
           context.dispatch('ajaxGetUser')
-        })
-        .catch(function (error) {
+        }).catch(function (error) {
           console.log(error);
         });
     }

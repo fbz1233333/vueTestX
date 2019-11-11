@@ -51,9 +51,12 @@
   <img src="../../assets/ad4.png" height="95" width="100%"/>
 
 
-    <a v-if="userLogin==null">
+    <a v-if="userInfo==null">
       <img  @click="OpenLogin" src="../../assets/loginII.png" height="67" width="100%"/>
     </a>
+    <div v-else>
+      评论
+    </div>
 <!--  //标记-->
 </div>
 </template>
@@ -72,8 +75,19 @@ export default {
     }
   },
   computed:{
-    userLogin:function(){
-      return this.$store.getters.getUserLogin;
+    token(){
+      // console.log(cookies.get('token'))
+      let info=this.$store.getters.getToken
+      console.log("计算token的值...",info)
+
+      return info
+    },
+    userInfo(){
+      // console.log(cookies.get('userInfo'))
+      let info=this.$store.getters.getUserInfo
+      let data =info
+      console.log("计算userInfo...:",data)
+      return data
     },
     media:function () {
       console.log(this.$store.getters.getChargeMedia)
