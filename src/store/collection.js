@@ -5,7 +5,7 @@ export default{
     collections:{}
   },
   getters:{
-    getCollectionByUid(state){
+    getCollection(state){
       return state.collections
     }
   },
@@ -16,9 +16,14 @@ export default{
   },
   actions: {
     ajaxGetCollectionByUid(context,id){
-      axios.get('app/api/collection/getCollectionByUid'+id).then(response=>{
-        context.commit('setCollection',response.collections)
-        console.log('info')
+      axios.get('app/api/collection/getCollectionByUid/'+id,{
+        headers:{
+          'UID':(eval ("(" + cookie.get('userInfo') + ")")).id,
+          'token':cookie.get('token')
+        }
+      }).then(response=>{
+        context.commit('setCollection',response.data.collections)
+        console.log('collections',response.data.collections)
       }).catch(error=>{
         console.log(error.errorInfo);
       });

@@ -3,7 +3,7 @@
   <br>
   <div style="background:#eee;padding: 20px">
 
-    <Card style="height: 1000px">
+    <Card style="height: auto">
       <h1 align="center" slot="title">
         <br>
        {{media.title}}<br><br>
