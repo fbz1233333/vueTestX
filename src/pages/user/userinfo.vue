@@ -1,20 +1,19 @@
 <template>
   <div>
-    <br>
     <div style="background:#eee;padding: 20px">
-
       <Card style="height: auto">
-        <br>
-        <div v-if="myInfo!=null">
-          <h1>用户id:{{myInfo.id}}</h1>
-          <h1>用户名:{{myInfo.name}}</h1>
-          <h1>创建时间:{{myInfo.createTime}}</h1>
-          <h1>头像:{{myInfo.headPic}}</h1>
-        </div>
-        <div v-for="(item,index) in collections">
-          评论id:{{item.id}}
-          <img :src="'app/image/'+item.pic" width="20" height="10"/>
-        </div>
+        <Menu mode="horizontal">
+          <MenuItem name="1" :to="'/to_user/user_info/'+myInfo.id+'/myHistory'">
+            <Icon type="ios-paper"></Icon>
+            HISTORY
+          </MenuItem>
+          <MenuItem name="2" :to="'/to_user/user_info/'+myInfo.id+'/myMedia'">
+            <Icon type="ios-paper"></Icon>
+            MEDIA
+          </MenuItem>
+        </Menu>
+
+        <router-view/>
 
 
 
@@ -23,7 +22,13 @@
   </div>
 </template>
 <script>
+  import cookies from 'js-cookie'
   export default{
+    data(){
+      return{
+        open:['1','2','3']
+      }
+    },
     computed:{
       collections(){
         return this.$store.getters.getCollection;
@@ -32,11 +37,17 @@
         return this.$store.getters.getMyInfo;
       }
     },
+    methods:{
+      handleDeleteCollect(id){
+        console.log(id)
+        this.$store.dispatch('ajaxDeleteCollect',id)
+      }
+    },
     created:function () {
-      this.$store.dispatch('ajaxGetMyInfo',this.$route.params.id)
-      this.$store.dispatch('ajaxGetCollectionByUid',this.$route.params.id)
+      this.$store.dispatch('ajaxGetCollectionByUid')
     },
     mounted:function () {
+      this.$store.dispatch('ajaxGetMyInfo',cookies.get('id'))
       this.$emit('hideCarousel')
     }
   }

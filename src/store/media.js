@@ -1,4 +1,5 @@
 import axios from 'axios'
+import cookie from 'js-cookie'
 
 export default{
   state:{
@@ -6,7 +7,9 @@ export default{
     mediaCount:0,
     mixedMedia:{
     },
-    chargeMedia:{}
+    chargeMedia:{},
+    myDrafts:[],
+    myCompletes:[]
   },
   getters:{
     getMediaList(state){
@@ -20,6 +23,12 @@ export default{
     },
     getChargeMedia(state){
       return state.chargeMedia
+    },
+    getMyDrafts(state){
+      return state.myDrafts
+    },
+    getMyCompletes(state){
+      return state.myCompletes
     }
   },
   mutations:{
@@ -34,9 +43,16 @@ export default{
     },
     setMixMedia(state,data){
       state.mixedMedia=data;
+    },
+    setMyDrafts(state,data){
+      state.myDrafts=data;
+    },
+    setMyCompletes(state,data){
+      state.myCompletes=data;
     }
   },
   actions:{
+
     ajaxGetMediaById(context,id){
       axios.get('app/api/media/'+id).then(response=>{
         console.log("axios根据id请求media得到",response.data)
@@ -65,15 +81,57 @@ export default{
       });
     },
     ajaxUpdateMedia(context,obj) {
-      console.log("请求update的mediaId为", obj);
       axios.patch('/app/api/media/update',obj
       ).then(function (response) {
-          console.log(JSON.stringify(obj))
-          context.dispatch('ajaxGetMedia')
-        })
+        console.log(JSON.stringify(obj))
+        context.dispatch('ajaxGetMedia')
+      })
         .catch(function (error) {
           console.log(error);
         });
-    }
+    },
+    ajaxDeleteMediaById(context,id){
+      axios.delete('/app/api/media/delete/'+id,{
+          headers:{
+            'UID':cookie.get('id'),
+            'token':cookie.get('token')
+          }
+        }
+      ).then(function (response) {
+          context.dispatch('ajaxGetDraftsByUid')
+      })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    ajaxInsertMedia(context,obj){
+      axios.post('/app/api/media/insert',obj,{
+          headers:{
+            'UID':cookie.get('id'),
+            'token':cookie.get('token')
+          }
+        }
+      ).then(function (response) {
+        context.dispatch('ajaxGetDraftsByUid')
+      })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    ajaxGetDraftsByUid(context){
+      axios.get('/app/api/media/findDrafts/'+cookie.get('id'),{
+          headers:{
+            'UID':cookie.get('id'),
+            'token':cookie.get('token')
+          }
+        }
+      ).then(function (response) {
+        context.commit('setMyDrafts',response.data.myDrafts)
+        context.commit('setMyCompletes',response.data.myCompletes)
+      })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
   }
 }

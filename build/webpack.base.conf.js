@@ -32,7 +32,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json','.less'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
@@ -41,6 +41,15 @@ module.exports = {
   module: {
     rules: [
       // ...(config.dev.useEslint ? [createLintingRule()] : []),
+      // {
+      //   test:/\.less$/,
+      //   loader:'less-loader'
+      // },
+      {
+        test:/\.md$/,
+        loader:'vue-markdown-loader',
+        // options:vueMarkdown,
+      },
       {
         test: /\.vue$/,
         loader: 'vue-loader',

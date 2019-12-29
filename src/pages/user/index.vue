@@ -1,34 +1,39 @@
 <template>
   <div>
-    {{userInfo}}<br>
+    {{S}}<br>
+    {{myInfo}}<br>
     {{token}}
     <Row>
       <Col :span="span" :offset="offset">
       <Row>
 
 
-        <Menu mode="horizontal" active-name="1">
+        <Menu mode="horizontal" active-name="0" >
 
           <div class="layout-nav-left">
-            <MenuItem name="1">
+            <MenuItem name="1" to="/to_user">
               <Icon type="ios-paper"></Icon>
-              导航1
+              首页
             </MenuItem>
-            <MenuItem name="2">
+            <MenuItem name="2" to="/to_user/next">
+              <Icon type="ios-paper"></Icon>
+              主页
+            </MenuItem>
+            <MenuItem name="3">
               <Icon type="ios-paper"></Icon>
               导航2
             </MenuItem>
-            <MenuItem name="3">
+            <MenuItem name="4">
               <Icon type="ios-paper"></Icon>
               导航3
             </MenuItem>
           </div>
 
-          <div v-if="userInfo==null" class="layout-nav-right">
+          <div v-if="S=='OUT'" class="layout-nav-right">
               <Button   type="primary" @click="handleOpenLogin">LOGIN</Button>
           </div>
-          <div v-else-if="userInfo!=null" class="layout-nav-right-bak">
-            <Button type="info" :to="'/to_user/user_info/'+userInfo.id">user:{{userInfo.name}}</Button>
+          <div v-else-if="S=='ON'" class="layout-nav-right-bak">
+            <Button type="info" :to="'/to_user/user_info/'+myInfo.id">user:{{myInfo.name}}</Button>
             <Button type="error" @click="handleLoginOut">logout</Button>
           </div>
         </Menu>
@@ -59,7 +64,7 @@
       <Col :span="span" :offset="offset">
       <Row :gutter="50">
         <Col span="18" >
-        <router-view @hideCarousel="HandleHideCarousel" @OpenLoginModal="handleOpenLogin"/>
+        <router-view @hideCarousel="HandleHideCarousel" @OpenLoginModal="handleOpenLogin" @OpenMediaModal="handleOpenMedia"/>
         </Col>
         <Col span="6">
 
@@ -84,7 +89,8 @@
     </Row>
 
     <!--    登录框-->
-    <Modal v-model="seen_loginModal" title="LOGIN" okText="提交" @on-ok="handlePostLogin">
+    <Modal v-model="seen_loginModal" :title="'LOGIN'" okText="提交" @on-ok="handlePostLogin">
+      <label v-if="login_info!=''">{{login_info}}</label>
       <label>name</label>
       <Input type="text" v-model="loginInfo.name"/>
       <label>password</label>
@@ -92,18 +98,19 @@
       <br>
     </Modal>
 
+
+
   </div>
 </template>
 <script>
 
   import cookies from 'js-cookie'
-  import axios from 'axios'
 
   export default {
     data(){
       return{
+
         seen_carousel:true,
-        seen_loginModal:false,
 
 
         span:14,
@@ -112,50 +119,61 @@
         loginInfo:{
           name:'',
           password:''
-        }
+        },
+        seen_loginModal:this.$store.getters.getModalLogin
       }
     },
     computed:{
-      token(){
-        // console.log(cookies.get('token'))
-        let info=this.$store.getters.getToken
-        console.log("计算token的值...",info)
 
-        return info
+      login_info(){
+        return this.$store.getters.getLoginInfo
       },
-      userInfo(){
+      handleSuccess(){
+        console.log('success')
+      },
+      S(){
+        return this.$store.getters.getS;
+      },
+      token(){
+        return this.$store.getters.getToken
+      },
+      myInfo(){
         // console.log(cookies.get('userInfo'))
-        let info=this.$store.getters.getUserInfo
-        let data =info
-        console.log("计算userInfo...:",data)
-        return data
+        return this.$store.getters.getMyInfo || {id:"",name:""}
       }
-
     },
     methods:{
+
       handleLoginOut(){
         console.log("logout...")
         cookies.remove('token')
-        cookies.remove('userInfo')
-        this.$store.commit('setUserInfo')
+        cookies.remove('id')
+        this.$store.commit('setUID')
         this.$store.commit('setToken')
-        axios.defaults.headers.common['token'] = ''
-        axios.defaults.headers.common['UID'] = ''
+        this.$store.commit('setS','OUT')
+        this.$store.commit('setMyInfo')
       },
-      handleIII(){
-        console.log("click",this.userInfo)
+      handleOpenMedia(){
+        this.seen_mediaInfo=true
       },
       HandleHideCarousel(){
         this.seen_carousel=false
       },
       handleOpenLogin(){
         console.log('handleOpenLogin');
-        this.seen_loginModal=true;
+        this.$store.commit('setModalLoginOn',{
+          ifSeen:true,
+          info:''
+        });
+        this.seen_loginModal=true
       },
       handlePostLogin(){
         console.log('post....',this.loginInfo)
         this.$store.dispatch('ajaxLogin',this.loginInfo)
       }
+    },
+    created(){
+      this.$store.dispatch('ajaxGetMyInfo',cookies.get('id'))
     }
 
   }
